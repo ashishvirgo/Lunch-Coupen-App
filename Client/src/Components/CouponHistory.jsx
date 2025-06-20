@@ -70,11 +70,12 @@ function CouponHistory() {
             <tr key={idx}>
               <td>{coupon.studentId}</td>
               <td>{coupon.name}</td>
-              <td>{coupon.item}</td>
+              <td>{coupon.items}</td>
               <td>₹{coupon.value}</td>
-              <td>{coupon.code}</td>
+              <td>{coupon.qrData}</td>
               <td>{coupon.mobile}</td>
               <td>{coupon.email}</td>
+              <td>{coupon.status}</td>
               <td>
                 <button onClick={() => handleSendWhatsApp(coupon)} style={{ marginRight: '10px' }}>
                   Send WhatsApp
