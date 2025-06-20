@@ -25,7 +25,7 @@ function CouponHistory() {
     if (!coupon.mobile) return alert('Mobile number not available');
 
     const message = encodeURIComponent(
-      `Hello ${coupon.name},\n\nHere is your ABESEC coupon:\n\nCoupon Code: ${coupon.qrData}\nItem: ${coupon.items}\nValue: ₹${coupon.value}\nValid until: 30th Jun 2025\n\nThank you.`
+      `Hello ${coupon.name},\n\nHere is your ABESEC coupon:\n\nCoupon Code: ${coupon.qrData}\nItem: ${coupon.items}\nValue: ₹${coupon.value}\nQR: ₹${coupon.qrImage}\nValid until: 30th Jun 2025\n\nThank you.`
     );
     window.open(`https://wa.me/91${coupon.mobile}?text=${message}`, '_blank');
   };
@@ -35,7 +35,7 @@ function CouponHistory() {
       await axios.post(`${apiUrl}/send-email`, {
         to: coupon.email,
         subject: 'Your ABESEC Coupon',
-        text: `Hi ${coupon.name},\n\nHere is your coupon:\nCode: ${coupon.qrData}\nItem: ${coupon.items}\nValue: ₹${coupon.value}\nValid till 30th Jun 2025\n\nRegards,\nABESEC Admin`
+        text: `Hi ${coupon.name},\n\nHere is your coupon:\nCode: ${coupon.qrData}\nQR: ${coupon.qrImage}\nItem: ${coupon.items}\nValue: ₹${coupon.value}\nValid till 30th Jun 2025\n\nRegards,\nABESEC Admin`
       });
       alert('Email sent successfully!');
     } catch (err) {
