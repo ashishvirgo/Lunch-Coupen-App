@@ -6,7 +6,7 @@ function VerifyCoupon() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [scanning, setScanning] = useState(false);
-
+  const apiUrl = import.meta.env.VITE_API_URL;
   const qrRegionId = 'reader';
   const html5QrCodeRef = useRef(null);
 
@@ -53,7 +53,7 @@ function VerifyCoupon() {
     if (!loading) {
       setLoading(true);
       try {
-        const res = await fetch('http://localhost:5000/verify', {
+        const res = await fetch(`${apiUrl}/verify`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ scannedData: data }),

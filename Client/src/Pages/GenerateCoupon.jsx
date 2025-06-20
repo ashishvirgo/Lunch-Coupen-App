@@ -16,7 +16,7 @@ function GenerateCoupon() {
 
   const [mode, setMode] = useState('single');
   const [count, setCount] = useState(1);
-
+  const apiUrl = import.meta.env.VITE_API_URL;
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -81,7 +81,7 @@ function GenerateCoupon() {
       for (let i = 0; i < howMany; i++) {
         for (const item of items) {
           // Get QR from backend
-          const res = await axios.post('http://localhost:5000/generate', { studentId });
+          const res = await axios.post(`${apiUrl}/generate`, { studentId });
           const { qrImage, qrData } = res.data;
 
           if (!firstPage) doc.addPage();

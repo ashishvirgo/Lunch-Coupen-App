@@ -4,14 +4,14 @@ import axios from 'axios';
 function CouponHistory() {
   const [coupons, setCoupons] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const apiUrl = import.meta.env.VITE_API_URL;
   useEffect(() => {
     fetchCoupons();
   }, []);
 
   const fetchCoupons = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/tokens'); // Update as needed
+      const res = await axios.get(`${apiUrl}/tokens`); // Update as needed
       setCoupons(res.data);
       setLoading(false);
     } catch (err) {
@@ -34,7 +34,7 @@ function CouponHistory() {
 
   const handleSendEmail = async (coupon) => {
     try {
-      await axios.post('http://localhost:5000/send-email', {
+      await axios.post(`${apiUrl}/send-email`, {
         to: coupon.email,
         subject: 'Your ABESEC Coupon',
         text: `Hi ${coupon.name},\n\nHere is your coupon:\nCode: ${coupon.code}\nItem: ${coupon.item}\nValue: ₹${coupon.value}\nValid till 30th Jun 2025\n\nRegards,\nABESEC Admin`
