@@ -17,6 +17,9 @@ const CouponSchema = new mongoose.Schema({
   mobile: String,
   email: String,
   qrData: String,
+  purpose: String, 
+  value: String, 
+  items: Array,
   status: { type: String, default: 'valid' },
   createdAt: { type: Date, default: Date.now },
 });
@@ -27,11 +30,11 @@ app.get('/tokens', async (req, res) => {
   res.json(all);
 });
 app.post('/generate', async (req, res) => {
-  const { studentId, name, dept, mobile, email } = req.body;
+  const { studentId, name, dept, mobile, email, purpose, value, items } = req.body;
   const uniqueText = `${studentId}-${Date.now()}`;
   const qrImage = await QRCode.toDataURL(uniqueText);
 
-  await Coupon.create({ studentId, qrData: uniqueText, name, dept, mobile, email });
+  await Coupon.create({ studentId, qrData: uniqueText, name, dept, mobile, email, purpose, value, items });
 
   res.json({ qrImage, qrData: uniqueText });
 });
