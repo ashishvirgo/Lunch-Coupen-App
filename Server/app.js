@@ -8,7 +8,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-mongoose.connect('mongodb://localhost:27017/hostel_mess');
+mongoose.connect('mongodb+srv://ashishvirgo12:abes1234@cluster0.tyj6h.mongodb.net/hostel_mess?retryWrites=true&w=majority&appName=Cluster0');
 
 const CouponSchema = new mongoose.Schema({
   studentId: String,
