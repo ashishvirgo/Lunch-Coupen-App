@@ -48,9 +48,11 @@ app.post('/verify', async (req, res) => {
   if (!coupon) return res.status(404).json({ valid: false, message: 'Invalid QR code' });
 
   else if (coupon.status !== 'valid') {
+    console.log("1")
     return res.status(400).json({ valid: false, message: 'Coupon already used or expired' });
   }
  else{
+  console.log("2")
   coupon.status = 'used';
   await coupon.save();
 
