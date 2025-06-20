@@ -47,14 +47,15 @@ app.post('/verify', async (req, res) => {
 
   if (!coupon) return res.status(404).json({ valid: false, message: 'Invalid QR code' });
 
-  if (coupon.status !== 'valid') {
+  else if (coupon.status !== 'valid') {
     return res.status(400).json({ valid: false, message: 'Coupon already used or expired' });
   }
-
+ else{
   coupon.status = 'used';
   await coupon.save();
 
   res.json({ valid: true, message: 'Coupon verified. Meal allowed!' });
+ }
 });
 
 app.listen(5000, () => console.log('Server running on port 5000'));
