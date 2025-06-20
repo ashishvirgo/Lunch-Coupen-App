@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { Html5Qrcode } from 'html5-qrcode';
 
 function VerifyCoupon() {
@@ -6,11 +6,20 @@ function VerifyCoupon() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [scanning, setScanning] = useState(false);
+
   const apiUrl = import.meta.env.VITE_API_URL;
   const qrRegionId = 'reader';
   const html5QrCodeRef = useRef(null);
 
+  useEffect(() => {
+    return () => {
+      stopScanner(); // Cleanup on unmount
+    };
+  }, []);
+
   const startScanner = async () => {
+    if (scanning || html5QrCodeRef.current) return;
+
     setMessage('');
     setError('');
     setScanning(true);
@@ -18,16 +27,22 @@ function VerifyCoupon() {
     html5QrCodeRef.current = new Html5Qrcode(qrRegionId);
 
     try {
-      console.log("start")
       const devices = await Html5Qrcode.getCameras();
-      console.log("56")
+
       if (devices.length === 0) {
         setError('No camera found');
         return;
       }
-     console.log("1")
-      const cameraId = devices[0].id;
-     console.log("2")
+
+      // Try to use back camera
+      const backCamera = devices.find(device =>
+        device.label.toLowerCase().includes('back') ||
+        device.label.toLowerCase().includes('rear') ||
+        device.label.toLowerCase().includes('environment')
+      );
+
+      const cameraId = backCamera ? backCamera.id : devices[0].id;
+
       await html5QrCodeRef.current.start(
         cameraId,
         { fps: 10, qrbox: 250 },
@@ -36,19 +51,35 @@ function VerifyCoupon() {
       );
     } catch (err) {
       if (err.name === 'NotAllowedError') {
-  setError('Camera access was denied. Please allow it in your browser settings.');
-}
-     else{
-      console.error('Camera start error:', err);
-      setError('Failed to start camera: ' + err.message);
-     }
+        setError('Camera access was denied. Please allow it in your browser settings.');
+      } else {
+        console.error('Camera start error:', err);
+        setError('Failed to start camera: ' + err.message);
+      }
+      setScanning(false);
     }
   };
+
+  const stopScanner = async () => {
+    try {
+      if (html5QrCodeRef.current) {
+        await html5QrCodeRef.current.stop();
+        await html5QrCodeRef.current.clear();
+      }
+    } catch (err) {
+      console.error("Error stopping scanner:", err);
+    } finally {
+      setScanning(false);
+      html5QrCodeRef.current = null;
+    }
+  };
+
   const isErrorMessage = (msg) => {
-  if (!msg) return false;
-  const lowerMsg = msg.toLowerCase();
-  return lowerMsg.includes('already used') || lowerMsg.includes('expired');
-};
+    if (!msg) return false;
+    const lowerMsg = msg.toLowerCase();
+    return lowerMsg.includes('already used') || lowerMsg.includes('expired');
+  };
+
   const handleScanSuccess = async (data) => {
     if (!loading) {
       setLoading(true);
@@ -58,10 +89,11 @@ function VerifyCoupon() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ scannedData: data }),
         });
+
         const result = await res.json();
         setMessage(result.message);
       } catch (err) {
-        setError('Verification failed. Try again.'+ err.message);
+        setError('Verification failed. Try again. ' + err.message);
       } finally {
         setLoading(false);
         stopScanner();
@@ -71,14 +103,7 @@ function VerifyCoupon() {
 
   const handleScanError = (err) => {
     console.warn('QR Scan error:', err);
-  };
-
-  const stopScanner = async () => {
-    if (html5QrCodeRef.current) {
-      await html5QrCodeRef.current.stop();
-      html5QrCodeRef.current.clear();
-      setScanning(false);
-    }
+    // No need to display frequent errors to user
   };
 
   return (
@@ -89,14 +114,20 @@ function VerifyCoupon() {
         <button onClick={startScanner}>Start Scanning</button>
       )}
 
-      <div id="reader" style={{ width: '300px', marginTop: '1rem' }}></div>
+      {scanning && (
+        <button onClick={stopScanner} style={{ marginTop: '1rem' }}>
+          Stop Scanning
+        </button>
+      )}
+
+      <div id={qrRegionId} style={{ width: '300px', marginTop: '1rem' }}></div>
 
       {loading && <p>Verifying...</p>}
-       {message && (
-      <p style={{ color: isErrorMessage(message) ? 'red' : 'green' }}>
-        {message}
-      </p>
-    )}
+      {message && (
+        <p style={{ color: isErrorMessage(message) ? 'red' : 'green' }}>
+          {message}
+        </p>
+      )}
       {error && <p style={{ color: 'red' }}>{error}</p>}
     </div>
   );
