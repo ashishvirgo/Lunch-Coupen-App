@@ -10,6 +10,7 @@ function VerifyCoupon() {
   const apiUrl = import.meta.env.VITE_API_URL;
   const qrRegionId = 'reader';
   const html5QrCodeRef = useRef(null);
+  const scannedOnce = useRef(false); // Prevent multiple scans
 
   useEffect(() => {
     return () => {
@@ -23,6 +24,7 @@ function VerifyCoupon() {
     setMessage('');
     setError('');
     setScanning(true);
+    scannedOnce.current = false;
 
     html5QrCodeRef.current = new Html5Qrcode(qrRegionId);
 
@@ -31,6 +33,8 @@ function VerifyCoupon() {
 
       if (devices.length === 0) {
         setError('No camera found');
+        html5QrCodeRef.current = null;
+        setScanning(false);
         return;
       }
 
@@ -81,29 +85,31 @@ function VerifyCoupon() {
   };
 
   const handleScanSuccess = async (data) => {
-    if (!loading) {
-      setLoading(true);
-      try {
-        const res = await fetch(`${apiUrl}/verify`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ scannedData: data }),
-        });
+    if (scannedOnce.current || loading) return;
+    scannedOnce.current = true;
 
-        const result = await res.json();
-        setMessage(result.message);
-      } catch (err) {
-        setError('Verification failed. Try again. ' + err.message);
-      } finally {
-        setLoading(false);
-        stopScanner();
-      }
+    await stopScanner(); // Stop scanning after first scan
+    setLoading(true);
+
+    try {
+      const res = await fetch(`${apiUrl}/verify`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ scannedData: data }),
+      });
+
+      const result = await res.json();
+      setMessage(result.message);
+    } catch (err) {
+      setError('Verification failed. Try again. ' + err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleScanError = (err) => {
     console.warn('QR Scan error:', err);
-    // No need to display frequent errors to user
+    // No need to show every scanning error
   };
 
   return (
