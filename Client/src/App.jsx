@@ -10,7 +10,7 @@ const App = () => {
     <div>
       <BrowserRouter>
       <Routes>
-        <Route path="/" element={<GenerateCoupon studentId="STU123" />}></Route>
+        <Route path="/" element={<DashBoard />}></Route>
         <Route path="/dashboard" element={<MessDashboard />} />
         <Route path="/hdashboard" element={<DashBoard />} />
         <Route path="/verify" element={<VerifyCoupon/>}></Route>
