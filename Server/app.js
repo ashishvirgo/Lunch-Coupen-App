@@ -19,7 +19,7 @@ const CouponSchema = new mongoose.Schema({
   qrData: String,
   purpose: String, 
   value: String, 
-  items: Array,
+  items: String,
   status: { type: String, default: 'valid' },
   createdAt: { type: Date, default: Date.now },
 });
