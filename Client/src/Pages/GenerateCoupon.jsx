@@ -81,7 +81,7 @@ function GenerateCoupon() {
       for (let i = 0; i < howMany; i++) {
         for (const item of items) {
           // Get QR from backend
-          const res = await axios.post(`${apiUrl}/generate`, { studentId });
+          const res = await axios.post(`${apiUrl}/generate`, { studentId, name, dept, mobile, email });
           const { qrImage, qrData } = res.data;
 
           if (!firstPage) doc.addPage();
