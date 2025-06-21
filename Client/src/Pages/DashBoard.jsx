@@ -6,48 +6,42 @@ import Navbar from '../Components/Navbar';
 
 function DashBoard() {
   const [activeComponent, setActiveComponent] = useState('');
+  const [isSidebarVisible, setIsSidebarVisible] = useState(true);
+
+  const toggleSidebar = () => setIsSidebarVisible(!isSidebarVisible);
 
   const renderComponent = () => {
-  if (activeComponent === '') {
-    return (
-      <div style={styles.buttonContainer}>
-        <button style={styles.GCButton} onClick={() => setActiveComponent('generate')}>
-          Generate Coupon
-        </button>
-        <button style={styles.VCButton} onClick={() => setActiveComponent('verify')}>
-          Verify Coupon
-        </button>
-        <button style={styles.CHButton} onClick={() => setActiveComponent('history')}>
-          Coupon History
-        </button>
-      </div>
-    );
-  }
+    if (activeComponent === '') {
+      return (
+        <div style={styles.buttonContainer}>
+          <button style={styles.GCButton} onClick={() => setActiveComponent('generate')}>Generate Coupon</button>
+          <button style={styles.VCButton} onClick={() => setActiveComponent('verify')}>Verify Coupon</button>
+          <button style={styles.CHButton} onClick={() => setActiveComponent('history')}>Coupon History</button>
+        </div>
+      );
+    }
 
-  switch (activeComponent) {
-    case 'generate':
-      return <GenerateCoupon />;
-    case 'verify':
-      return <VerifyCoupon/>;;
-    case 'history':
-      return <CouponHistory />;
-    case 'settings':
-      return <div>Settings Component</div>;
-    default:
-      return null;
-  }
-};
+    switch (activeComponent) {
+      case 'generate': return <GenerateCoupon />;
+      case 'verify': return <VerifyCoupon />;
+      case 'history': return <CouponHistory />;
+      case 'settings': return <div>Settings Component</div>;
+      default: return null;
+    }
+  };
 
   return (
-    <div className='container'>
-      <Navbar />
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
+    <div className='container-fluid'>
+      <Navbar onSidebarToggle={toggleSidebar} />
       <div style={styles.dashboardContainer}>
-        <aside style={styles.sidebar}>
+        {/* Sidebar */}
+        <aside
+          style={{
+            ...styles.sidebar,
+            display: isSidebarVisible ? 'flex' : 'none',
+          }}
+          className="d-none d-lg-flex"
+        >
           <h2 style={{ color: 'white' }}>Dashboard</h2>
           <nav>
             <ul style={styles.navList}>
@@ -59,6 +53,7 @@ function DashBoard() {
           </nav>
         </aside>
 
+        {/* Main Content */}
         <main style={styles.mainContent}>
           {renderComponent()}
         </main>
@@ -66,21 +61,20 @@ function DashBoard() {
     </div>
   );
 }
+
 const styles = {
-  
   dashboardContainer: {
     display: 'flex',
-    width: '100vw',
-    height: '90vh',
-    fontFamily: 'Arial, sans-serif',
+    width: '100%',
+    paddingTop: '100px',
   },
   sidebar: {
     width: '220px',
     backgroundColor: '#2c3e50',
     padding: '20px',
     color: 'white',
-    display: 'flex',
     flexDirection: 'column',
+    position: 'relative',
   },
   navList: {
     listStyle: 'none',
@@ -101,51 +95,43 @@ const styles = {
     overflowY: 'auto',
   },
   buttonContainer: {
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'center',
-  justifyContent: 'center',
-  height: '100%',
-  gap: '20px',
-},
-
-GCButton: {
-  width: '300px',
-  height: '280px',
-  fontSize: '2.5rem',
-  backgroundColor: 'red',
-  color: 'white',
-  border: 'none',
-  borderRadius: '8px',
-  cursor: 'pointer',
-  transition: 'background-color 0.3s ease',
-},
-VCButton: {
-  width: '300px',
-  height: '280px',
-  fontSize: '2.5rem',
-  backgroundColor: 'green',
-  color: 'white',
-  border: 'none',
-  borderRadius: '8px',
-  cursor: 'pointer',
-  transition: 'background-color 0.3s ease',
-},
-CHButton: {
-  width: '300px',
-  height: '280px',
-  fontSize: '2.5rem',
-  backgroundColor: 'blue',
-  color: 'white',
-  border: 'none',
-  borderRadius: '8px',
-  cursor: 'pointer',
-  transition: 'background-color 0.3s ease',
-},
-
-largeButtonHover: {
-  backgroundColor: '#2980b9',
-}
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100%',
+    gap: '20px',
+  },
+  GCButton: {
+    width: '300px',
+    height: '280px',
+    fontSize: '2.5rem',
+    backgroundColor: 'red',
+    color: 'white',
+    border: 'none',
+    borderRadius: '8px',
+    cursor: 'pointer',
+  },
+  VCButton: {
+    width: '300px',
+    height: '280px',
+    fontSize: '2.5rem',
+    backgroundColor: 'green',
+    color: 'white',
+    border: 'none',
+    borderRadius: '8px',
+    cursor: 'pointer',
+  },
+  CHButton: {
+    width: '300px',
+    height: '280px',
+    fontSize: '2.5rem',
+    backgroundColor: 'blue',
+    color: 'white',
+    border: 'none',
+    borderRadius: '8px',
+    cursor: 'pointer',
+  },
 };
 
 export default DashBoard;
