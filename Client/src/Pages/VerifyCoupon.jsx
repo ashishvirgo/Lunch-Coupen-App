@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import { Html5Qrcode } from 'html5-qrcode';
+import styles from './VerifyCoupon.module.css'; // Import CSS module
 
 function VerifyCoupon() {
   const [message, setMessage] = useState('');
@@ -10,11 +11,11 @@ function VerifyCoupon() {
   const apiUrl = import.meta.env.VITE_API_URL;
   const qrRegionId = 'reader';
   const html5QrCodeRef = useRef(null);
-  const scannedOnce = useRef(false); // Prevent multiple scans
+  const scannedOnce = useRef(false);
 
   useEffect(() => {
     return () => {
-      stopScanner(); // Cleanup on unmount
+      stopScanner();
     };
   }, []);
 
@@ -38,7 +39,6 @@ function VerifyCoupon() {
         return;
       }
 
-      // Try to use back camera
       const backCamera = devices.find(device =>
         device.label.toLowerCase().includes('back') ||
         device.label.toLowerCase().includes('rear') ||
@@ -88,7 +88,7 @@ function VerifyCoupon() {
     if (scannedOnce.current || loading) return;
     scannedOnce.current = true;
 
-    await stopScanner(); // Stop scanning after first scan
+    await stopScanner();
     setLoading(true);
 
     try {
@@ -109,32 +109,35 @@ function VerifyCoupon() {
 
   const handleScanError = (err) => {
     console.warn('QR Scan error:', err);
-    // No need to show every scanning error
   };
 
   return (
-    <div>
+    <div className={styles.container}>
       <h2>Verify Your Coupon</h2>
 
       {!scanning && (
-        <button onClick={startScanner}>Start Scanning</button>
+        <button className={styles.button} onClick={startScanner}>
+          Start Scanning
+        </button>
       )}
 
       {scanning && (
-        <button onClick={stopScanner} style={{ marginTop: '1rem' }}>
+        <button className={styles.button} onClick={stopScanner}>
           Stop Scanning
         </button>
       )}
 
-      <div id={qrRegionId} style={{ width: '300px', marginTop: '1rem' }}></div>
+      <div id={qrRegionId} className={styles.qrRegion}></div>
 
       {loading && <p>Verifying...</p>}
+
       {message && (
-        <p style={{ color: isErrorMessage(message) ? 'red' : 'green' }}>
+        <p className={`${styles.message} ${isErrorMessage(message) ? styles.error : styles.success}`}>
           {message}
         </p>
       )}
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+
+      {error && <p className={`${styles.message} ${styles.error}`}>{error}</p>}
     </div>
   );
 }
