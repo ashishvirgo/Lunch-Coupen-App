@@ -41,7 +41,10 @@ function DashBoard() {
 
   return (
     <div className="container">
-      <Navbar />
+      <div className='navbar1'>
+        <Navbar />
+      </div>
+      
       <div className="dashboard-container">
         <aside className="sidebar">
           <h2>Dashboard</h2>

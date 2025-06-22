@@ -1,14 +1,100 @@
-.navbar-brand {
-  width: 100vw;
-  height: 15vh;
-  font-size: 1.2rem;
+/* Base navbar styles */
+.custom-navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: #ffffff;
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.7rem 1.5rem;
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* Branding */
+.brand {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-@media (max-width: 576px) {
-  .navbar-brand img {
-    max-width: 50px;
+.logo {
+  width: 60px;
+  height: auto;
+}
+
+.brand-text {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Navigation links */
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links li a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.nav-links li a:hover {
+  color: #007bff;
+}
+
+/* Hamburger menu (mobile) */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 5px;
+}
+
+.bar {
+  width: 25px;
+  height: 3px;
+  background-color: #333;
+  margin: 4px 0;
+  transition: all 0.3s;
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  .nav-links {
+    position: absolute;
+    top: 70px;
+    right: 0;
+    background-color: white;
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+  }
+
+  .nav-links.open {
+    max-height: 200px;
+    border-top: 1px solid #ccc;
+  }
+
+  .nav-links li {
+    margin: 10px 0;
+  }
+
+  .hamburger {
+    display: flex;
   }
 }
