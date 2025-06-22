@@ -50,11 +50,12 @@ function DashBoard() {
           <h2>Dashboard</h2>
           <nav>
             <ul className="nav-list">
+              <li><span className="nav-link" onClick={() => setActiveComponent('')}>Home</span></li>
               <li><span className="nav-link" onClick={() => setActiveComponent('generate')}>Generate Coupon</span></li>
               <li><span className="nav-link" onClick={() => setActiveComponent('verify')}>Verify Coupon</span></li>
               <li><span className="nav-link" onClick={() => setActiveComponent('history')}>Coupon History</span></li>
               <li><span className="nav-link" onClick={() => setActiveComponent('settings')}>Settings</span></li>
-              <li><span className="nav-link" onClick={() => setActiveComponent('')}>Home</span></li>
+              
             </ul>
           </nav>
         </aside>

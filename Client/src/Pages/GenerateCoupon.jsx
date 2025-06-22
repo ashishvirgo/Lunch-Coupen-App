@@ -117,7 +117,7 @@ function GenerateCoupon() {
   };
 
   return (
-    <div className="container">
+    <div>
       <div style={{
         width: '40vw',
         textAlign: 'center',
