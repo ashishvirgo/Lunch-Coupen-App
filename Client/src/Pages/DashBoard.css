@@ -1,0 +1,92 @@
+/* Container styles */
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: auto;
+  font-family: Arial, sans-serif;
+}
+
+.sidebar {
+  width: 100%;
+  background-color: #2c3e50;
+  padding: 20px;
+  color: white;
+}
+
+.nav-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 20px;
+}
+
+.nav-link {
+  display: block;
+  padding: 10px 0;
+  color: #ecf0f1;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.main-content {
+  flex-grow: 1;
+  padding: 20px;
+  background-color: #ecf0f1;
+}
+
+/* Button container */
+.button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+  margin-top: 40px;
+}
+
+.dashboard-button {
+  width: 90%;
+  max-width: 300px;
+  height: 150px;
+  font-size: 1.5rem;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.dashboard-button.generate {
+  background-color: red;
+}
+
+.dashboard-button.verify {
+  background-color: green;
+}
+
+.dashboard-button.history {
+  background-color: blue;
+}
+
+.dashboard-button:hover {
+  opacity: 0.9;
+}
+
+/* Responsive layout for larger screens */
+@media (min-width: 768px) {
+  .dashboard-container {
+    flex-direction: row;
+    height: 90vh;
+  }
+
+  .sidebar {
+    width: 220px;
+    min-width: 220px;
+    flex-shrink: 0;
+  }
+
+  .button-container {
+    flex-direction: row;
+  }
+}
