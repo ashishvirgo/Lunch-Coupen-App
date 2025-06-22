@@ -42,11 +42,6 @@ function DashBoard() {
   return (
     <div className="container">
       <Navbar />
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
       <div className="dashboard-container">
         <aside className="sidebar">
           <h2>Dashboard</h2>
