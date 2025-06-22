@@ -1,4 +1,6 @@
 .navbar-brand {
+  width: 100vw;
+  height: 15vh;
   font-size: 1.2rem;
   display: flex;
   align-items: center;
